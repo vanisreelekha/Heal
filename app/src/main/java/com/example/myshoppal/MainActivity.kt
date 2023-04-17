@@ -1,9 +1,7 @@
 package com.example.myshoppal
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.os.Debug
 import android.widget.Button
 import android.widget.EditText
 import androidx.annotation.RequiresApi
@@ -63,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             //storing your text to a variable
             val data=textInput.text.toString()
             val mood=predict(interpreter as Interpreter,data)
+           // print(mood)
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS")
             val current = LocalDateTime.now().format(formatter)
             myRef.child("datas").child(current.toString()).setValue(data)
@@ -131,25 +130,43 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
     //predicting the model
     fun predict(interpreter: Interpreter, inputData: String): FloatArray {
         // Get input and output tensors
         val inputTensor = interpreter.getInputTensor(0)
         val outputTensor = interpreter.getOutputTensor(0)
-
         // Prepare input data
-        inputTensor.buffer().rewind()
-        inputTensor.buffer.put(inputData)
+
+//        inputTensor.buffer().rewind()
+//        inputTensor.buffer().put(inputData)
 
         // Run inference
-        interpreter.run()
-
+        interpreter.run(inputTensor, outputTensor)
         // Get output data
         val outputData = FloatArray(outputTensor.shape()[0])
-        outputTensor.buffer.rewind()
-        outputTensor.buffer.get(outputData)
+//        outputTensor.buffer().rewind()
+//
+//        outputTensor.buffer.get(outputData)
+
+
 
         return outputData
+      //  return outputData
+//        val model = MyModel.newInstance(context)
+//
+//// Creates inputs for reference.
+//        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 300), DataType.FLOAT32)
+//        inputFeature0.loadBuffer(byteBuffer)
+//
+//// Runs model inference and gets result.
+//        val outputs = model.process(inputFeature0)
+//        val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+//
+//// Releases model resources if no longer used.
+//        model.close()
+//
+
     }
 //loading the model to the application
    fun loadModelFromAsset( assetFileName: String): Any {
