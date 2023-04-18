@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         //calling model
         val interpreter = loadModelFromAsset( "my_model.tflite")
 
+
+        println("ok")
         // set on-click listener
         btn.setOnClickListener {
             // your code to perform when the user clicks on the button
@@ -61,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             //storing your text to a variable
             val data=textInput.text.toString()
             val mood=predict(interpreter as Interpreter,data)
-           // print(mood)
+            print(mood)
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS")
             val current = LocalDateTime.now().format(formatter)
             myRef.child("datas").child(current.toString()).setValue(data)
@@ -137,11 +139,12 @@ class MainActivity : AppCompatActivity() {
         val inputTensor = interpreter.getInputTensor(0)
         val outputTensor = interpreter.getOutputTensor(0)
         // Prepare input data
-
+          println("ok2")
 //        inputTensor.buffer().rewind()
 //        inputTensor.buffer().put(inputData)
 
         // Run inference
+
         interpreter.run(inputTensor, outputTensor)
         // Get output data
         val outputData = FloatArray(outputTensor.shape()[0])
@@ -152,6 +155,7 @@ class MainActivity : AppCompatActivity() {
 
 
         return outputData
+        println(outputData)
       //  return outputData
 //        val model = MyModel.newInstance(context)
 //
